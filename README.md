@@ -44,25 +44,20 @@ Follow the [Godot official guide for compiling on Windows](https://docs.godoteng
    }
    ```
 
-4. Add a conditional to disable certain arguments **only in export templates**. You can use the `TOOLS_ENABLED` macro, which is defined for editor builds (`tools=yes`) and undefined for game builds (`tools=no`).
+4. Comment out unwanted arguments **only in export templates**.
 
    ```cpp
    for (int i = 1; i < argc; i++) {
        String arg = argv[i];
-   #ifdef TOOLS_ENABLED
-       // Allow all options in the editor
-       if (arg == "--help") {
-           print_help();
-           return 0;
-       }
-   #else
-       // Disable debug-related options in exported builds
-       if (arg == "--help" || arg == "--debug" || arg.begins_with("--")) {
-           continue; // Ignore these options in game builds
-       }
-   #endif
+   
+       // Disable debug-related options in exported builds.
+       //if (arg == "--help") {
+       //    print_help();
+       //    return 0;
+       //}
+   
        // Retain essential or custom arguments like --fullscreen
-       if (arg == "--fullscreen") {
+       if (arg == "--fullscreen" || arg.begins_with("--")) {
            OS::get_singleton()->set_fullscreen(true);
        }
    }
